@@ -11,7 +11,7 @@ exports.handler = async () => {
         const src = dec(tag(it, "source"));
         let title = dec(tag(it, "title"));
         if (src && title.endsWith(" - " + src)) title = title.slice(0, -(src.length + 3));
-        if (!title || seen[title]) return;
+        if (!title || seen[title] || /Jogada,|Emissão em Direto|aos \d+'/.test(title)) return;
         seen[title] = 1;
         all.push({ src: src || "Notícias", title, link: tag(it, "link"), date: tag(it, "pubDate") });
       });
