@@ -9,11 +9,12 @@ exports.handler = async () => {
       const x = await (await fetch(url)).text();
       x.split("<item>").slice(1, 20).forEach((it) => {
         const src = dec(tag(it, "source"));
+        const sm = it.match(/<source[^>]*url="([^"]+)"/);
         let title = dec(tag(it, "title"));
         if (src && title.endsWith(" - " + src)) title = title.slice(0, -(src.length + 3));
         if (!title || seen[title] || /Jogada,|Emissão em Direto|aos \d+'/.test(title)) return;
         seen[title] = 1;
-        all.push({ src: src || "Notícias", title, link: tag(it, "link"), date: tag(it, "pubDate") });
+        all.push({ src: src || "Notícias", site: sm ? sm[1] : "", title, link: tag(it, "link"), date: tag(it, "pubDate") });
       });
     } catch (e) {}
   }));
