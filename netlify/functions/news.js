@@ -1,5 +1,5 @@
 const G = (q) => "https://news.google.com/rss/search?q=" + encodeURIComponent(q) + "&hl=pt-PT&gl=PT&ceid=PT:pt-150";
-const FEEDS = [G("futebol transferências when:30d -FotMob -Flashscore -NFL -Brasileirão -Série"), G("futebol Liga Portugal when:2d"), G("futebol polémica árbitro when:7d"), G("futebol Benfica Sporting FC Porto when:2d")];
+const FEEDS = [G("futebol transferências Benfica Sporting FC Porto when:30d -Santos -Flamengo -Brasileirão -FotMob -Flashscore"), G("futebol Liga Portugal when:2d"), G("futebol polémica árbitro when:7d"), G("futebol Benfica Sporting FC Porto when:2d")];
 const tag = (s, t) => { const m = s.match(new RegExp("<" + t + "[^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?</" + t + ">")); return m ? m[1].trim() : ""; };
 const dec = (s) => s.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
 exports.handler = async () => {
