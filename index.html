@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bola Quente – Notícias de Futebol</title>
+<style>
+:root{--bg:#f6f7f4;--card:#fff;--tx:#14201a;--mut:#5d6b63;--ac:#0a7d3e;--ac2:#e8f5ec;--bd:#dfe4de;--hot:#d6402b}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1511;--card:#17211b;--tx:#eaf1ec;--mut:#9fb0a5;--ac:#3ddc84;--ac2:#14301f;--bd:#26362c;--hot:#ff6b55;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-top:env(safe-area-inset-top,0)}
+header,main{max-width:860px;margin:0 auto;padding:0 16px}header{padding-top:18px}
+h1{margin:0;font-size:26px}h1 span{color:var(--hot)}.sub{color:var(--mut);font-size:14px;margin:2px 0 8px}
+nav{display:flex;gap:8px;overflow-x:auto;padding:10px 16px;max-width:860px;margin:0 auto;position:sticky;top:0;background:var(--bg)}
+nav button{flex:none;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 14px;border-radius:99px;font:inherit;font-size:14px}
+nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+section{display:none}section.on{display:block}h2{font-size:18px;margin:14px 0 10px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.t{flex:1;font-weight:600}.t.r{text-align:right}
+.sc{font-weight:800;font-size:18px;background:var(--ac2);color:var(--ac);padding:2px 12px;border-radius:8px;min-width:64px;text-align:center}
+.meta{color:var(--mut);font-size:13px;margin-top:6px}.bar{display:flex;height:8px;border-radius:99px;overflow:hidden;margin:10px 0 4px;background:var(--bd)}
+.bar i{display:block}.b1{background:var(--ac)}.bx{background:#9aa79f}.b2{background:var(--hot)}
+.pl{display:flex;justify-content:space-between;font-size:12px;color:var(--mut)}
+.tip{margin-top:10px;background:var(--ac2);border-radius:10px;padding:8px 10px;font-size:14px}.tip b{color:var(--ac)}
+a.n{color:var(--tx);text-decoration:none;font-weight:600}.warn{font-size:12.5px;color:var(--mut);border-top:1px solid var(--bd);margin:22px 0 30px;padding-top:12px}
+</style>
+</head>
+<body>
+<header><h1>Bola <span>Quente</span> ⚽</h1><p class="sub">Resultados, dicas, transferências e o que mais se fala. Atualiza sozinho.</p></header>
+<nav id="nav"><button class="on" data-s="res">Resultados</button><button data-s="dic">Dicas</button><button data-s="tra">Transferências</button><button data-s="foc">Em foco</button></nav>
+<main>
+<section id="res" class="on"><h2>Resultados</h2><div id="resL">A carregar…</div></section>
+<section id="dic"><h2>Próximos jogos e dicas</h2><p class="sub">Estimativa simples baseada na classificação. Não são garantias.</p><div id="dicL">A carregar…</div></section>
+<section id="tra"><h2>Transferências</h2><div id="traL">A carregar…</div></section>
+<section id="foc"><h2>Em foco</h2><div id="focL">A carregar…</div></section>
+<p class="warn">+18 · Apostar envolve risco de perda. Joga com responsabilidade e só com dinheiro que podes perder. As dicas são apenas informativas. Notícias: títulos e ligações das fontes originais.</p>
+</main>
+<script>
+var $=function(i){return document.getElementById(i)};
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function hr(u){return new Date(u).toLocaleTimeString("pt-PT",{hour:"2-digit",minute:"2-digit"})}
+function dt(u){return new Date(u).toLocaleDateString("pt-PT",{day:"numeric",month:"short"})}
+function tip(h,a,p){var p1=p[0],px=p[1],p2=p[2];
+ if(p1>=55)return"Vitória do "+h+" ("+Math.round(p1)+"%)";
+ if(p2>=55)return"Vitória do "+a+" ("+Math.round(p2)+"%)";
+ if(p1>=p2)return"Dupla hipótese 1X: "+h+" ou empate ("+Math.round(p1+px)+"%)";
+ return"Dupla hipótese X2: empate ou "+a+" ("+Math.round(p2+px)+"%)"}
+fetch("/api/matches").then(function(r){return r.json()}).then(function(M){
+ var fin=M.filter(function(m){return m.status==="FINISHED"}).sort(function(a,b){return b.utc<a.utc?-1:1});
+ $("resL").innerHTML=fin.length?fin.map(function(m){return'<div class="card"><div class="row"><span class="t">'+esc(m.home)+'</span><span class="sc">'+m.hs+' – '+m.as+'</span><span class="t r">'+esc(m.away)+'</span></div><div class="meta">'+esc(m.comp)+' · '+dt(m.utc)+'</div></div>'}).join(""):"Sem resultados recentes.";
+ var up=M.filter(function(m){return m.status!=="FINISHED"}).sort(function(a,b){return a.utc<b.utc?-1:1});
+ $("dicL").innerHTML=up.length?up.map(function(m){var p=m.prob,live=m.status==="IN_PLAY"||m.status==="PAUSED";
+  var b=p?'<div class="bar"><i class="b1" style="width:'+p[0]+'%"></i><i class="bx" style="width:'+p[1]+'%"></i><i class="b2" style="width:'+p[2]+'%"></i></div><div class="pl"><span>1 · '+Math.round(p[0])+'%</span><span>X · '+Math.round(p[1])+'%</span><span>2 · '+Math.round(p[2])+'%</span></div><div class="tip"><b>Dica:</b> '+esc(tip(m.home,m.away,p))+'</div>':"";
+  return'<div class="card"><div class="row"><span class="t">'+esc(m.home)+'</span><span class="meta" style="margin:0">'+(live?"AO VIVO "+m.hs+"–"+m.as:dt(m.utc)+" · "+hr(m.utc))+'</span><span class="t r">'+esc(m.away)+'</span></div><div class="meta">'+esc(m.comp)+'</div>'+b+'</div>'}).join(""):"Sem jogos agendados.";
+}).catch(function(){$("resL").textContent=$("dicL").textContent="Não foi possível carregar os jogos."});
+fetch("/api/news").then(function(r){return r.json()}).then(function(N){
+ var re=/transfer|sign|deal|bid|loan|contrat|reforço|rumor/i;
+ function L(a){return a.length?a.slice(0,15).map(function(n){return'<div class="card"><a class="n" href="'+esc(n.link)+'" target="_blank" rel="noopener">'+esc(n.title)+'</a><div class="meta">'+esc(n.src)+'</div></div>'}).join(""):"Sem notícias."}
+ $("traL").innerHTML=L(N.filter(function(n){return re.test(n.title)}));
+ $("focL").innerHTML=L(N.filter(function(n){return!re.test(n.title)}));
+}).catch(function(){$("traL").textContent=$("focL").textContent="Não foi possível carregar as notícias."});
+$("nav").onclick=function(e){var s=e.target.dataset.s;if(!s)return;document.querySelectorAll("nav button,section").forEach(function(x){x.classList.remove("on")});e.target.classList.add("on");$(s).classList.add("on")};
+</script>
+</body>
+</html>
