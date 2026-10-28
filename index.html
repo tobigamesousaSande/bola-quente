@@ -8,9 +8,9 @@
 <style>
 :root{--bg:#070b09;--card:#101713;--card2:#16211b;--bd:#1d2c23;--tx:#eef5f0;--mut:#8aa196;--g:#39ff88;--r:#ff5a4d;color-scheme:dark}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:radial-gradient(900px 400px at 50% -120px,#0f2a1b,var(--bg));background-color:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-top:env(safe-area-inset-top,0);padding-bottom:calc(86px + env(safe-area-inset-bottom,0))}
+body{margin:0;background:radial-gradient(900px 400px at 50% -120px,#0f2a1b,var(--bg));background-color:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-top:calc(76px + env(safe-area-inset-top,0));padding-bottom:110px}
 header,main{max-width:720px;margin:0 auto;padding:0 16px}
-header{padding-top:18px;display:flex;align-items:center;justify-content:space-between}
+header{padding-top:12px;display:flex;align-items:center;justify-content:space-between}
 .logo{font-weight:900;font-size:22px;letter-spacing:-.5px}.logo b{color:var(--g);text-shadow:0 0 18px rgba(57,255,136,.55)}
 .live{display:none;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--r);background:rgba(255,90,77,.12);padding:5px 10px;border-radius:99px}
 .live.on{display:flex}.dot{width:7px;height:7px;border-radius:50%;background:var(--r);animation:p 1.2s infinite}
@@ -40,14 +40,15 @@ a.n:active{border-color:var(--g)}a.n strong{display:block;font-size:16px;line-he
 @keyframes s{to{background-position:-200% 0}}
 .em{color:var(--mut);padding:30px 0;text-align:center}
 .warn{font-size:12px;color:var(--mut);margin:26px 0;line-height:1.5}
-nav{position:fixed;left:0;right:0;bottom:0;background:rgba(10,16,13,.92);backdrop-filter:blur(14px);border-top:1px solid var(--bd);padding:8px 8px calc(8px + env(safe-area-inset-bottom,0));display:flex;justify-content:center;z-index:9}
+nav{position:fixed;left:0;right:0;top:0;background:rgba(10,16,13,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);padding:calc(6px + env(safe-area-inset-top,0)) 8px 6px;display:flex;justify-content:center;z-index:9}
 nav div{display:flex;max-width:720px;width:100%}
-nav button{flex:1;background:none;border:0;color:var(--mut);font:inherit;font-size:11px;font-weight:700;padding:6px 0;display:flex;flex-direction:column;align-items:center;gap:3px}
+nav button{flex:1;background:none;border:0;color:var(--mut);font:inherit;font-size:11px;font-weight:700;padding:4px 0;display:flex;flex-direction:column;align-items:center;gap:2px}
 nav button span{font-size:20px;filter:grayscale(1) opacity(.7)}
 nav button.on{color:var(--g)}nav button.on span{filter:none;text-shadow:0 0 12px var(--g)}
 </style>
 </head>
 <body>
+<nav><div id="nav"><button class="on" data-s="res"><span>📊</span>Resultados</button><button data-s="dic"><span>🎯</span>Dicas</button><button data-s="tra"><span>🔁</span>Mercado</button><button data-s="foc"><span>🔥</span>Em foco</button></div></nav>
 <header><div><div class="logo">BOLA <b>QUENTE</b> ⚽</div><p class="sub">Resultados, dicas e notícias. Atualiza sozinho.</p></div><div class="live" id="live"><i class="dot"></i>AO VIVO</div></header>
 <main>
 <section id="res" class="on"><div id="resL"><div class="sk"></div><div class="sk"></div></div></section>
@@ -56,7 +57,6 @@ nav button.on{color:var(--g)}nav button.on span{filter:none;text-shadow:0 0 12px
 <section id="foc"><h2>Em foco</h2><div id="focL"><div class="sk"></div><div class="sk"></div></div></section>
 <p class="warn">+18 · Apostar envolve risco de perda. Joga com responsabilidade e só com dinheiro que podes perder. As dicas são apenas informativas. Notícias: títulos e ligações das fontes originais.</p>
 </main>
-<nav><div id="nav"><button class="on" data-s="res"><span>📊</span>Resultados</button><button data-s="dic"><span>🎯</span>Dicas</button><button data-s="tra"><span>🔁</span>Mercado</button><button data-s="foc"><span>🔥</span>Em foco</button></div></nav>
 <script>
 var $=function(i){return document.getElementById(i)};
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
