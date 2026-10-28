@@ -31,8 +31,11 @@ h2{font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;
 .bar{display:flex;height:7px;border-radius:99px;overflow:hidden;margin:14px 0 6px;background:var(--bd);gap:2px}
 .bar i{display:block}.b1{background:var(--g);box-shadow:0 0 10px rgba(57,255,136,.5)}.bx{background:#5d7066}.b2{background:var(--r)}
 .pl{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);font-weight:600}
-.tip{margin-top:12px;display:flex;gap:8px;align-items:center;background:rgba(57,255,136,.08);border:1px solid rgba(57,255,136,.25);border-radius:12px;padding:9px 12px;font-size:14px}
-.tip b{background:var(--g);color:#04210f;font-size:11px;font-weight:900;letter-spacing:.6px;padding:3px 7px;border-radius:6px}
+.xg{text-align:center;font-size:12px;color:var(--mut);margin-top:8px}
+.tps{margin-top:12px;display:grid;gap:6px}
+.tp{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;background:rgba(57,255,136,.07);border:1px solid rgba(57,255,136,.22);border-radius:12px;padding:9px 12px;font-size:14px}
+.tp b{background:var(--g);color:#04210f;font-size:10px;font-weight:900;letter-spacing:.5px;padding:3px 7px;border-radius:6px;text-transform:uppercase;white-space:nowrap}
+.tp .pc{font-weight:900;color:var(--g)}
 a.n{display:flex;gap:12px;align-items:flex-start;text-decoration:none;color:var(--tx);background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:10px}
 a.n:active{border-color:var(--g)}a.n strong{display:block;font-size:16px;line-height:1.3;margin-top:8px}
 .ic{width:42px;height:42px;flex:none;border-radius:10px;background:#fff;padding:5px;object-fit:contain}
@@ -64,7 +67,7 @@ nav button.on{color:var(--g)}nav button.on span{filter:none;text-shadow:0 0 12px
 <header><div><div class="logo">BOLA <b>QUENTE</b> ⚽</div><p class="sub">Resultados, dicas e notícias. Atualiza sozinho.</p></div><div class="live" id="live"><i class="dot"></i>AO VIVO</div></header>
 <main>
 <section id="res" class="on"><div id="resL"><div class="sk"></div><div class="sk"></div></div></section>
-<section id="dic"><p class="sub" style="margin-top:14px">Estimativa simples baseada na classificação. Não são garantias.</p><div id="dicL"><div class="sk"></div><div class="sk"></div></div></section>
+<section id="dic"><p class="sub" style="margin-top:14px">Estimativas estatísticas baseadas nos golos e na classificação de cada equipa. Não são garantias.</p><div id="dicL"><div class="sk"></div><div class="sk"></div></div></section>
 <section id="tab"><h2>Classificação</h2><div class="chips" id="chips"></div><div id="tabL"><div class="sk"></div></div></section>
 <section id="tra"><h2>Transferências</h2><div id="traL"><div class="sk"></div></div></section>
 <section id="foc"><h2>Em foco</h2><div id="focL"><div class="sk"></div><div class="sk"></div></div></section>
@@ -80,18 +83,16 @@ function dayLabel(u){var d=new Date(u),t=new Date(),k=function(x){return x.toDat
 function crest(n){var h=0,i;for(i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))%360;return'<span class="cr" style="--h:'+h+'">'+esc(n.replace(/[^A-Za-zÀ-ÿ ]/g,"").trim().slice(0,3).toUpperCase())+'</span>'}
 function team(n){return'<div class="tm">'+crest(n)+'<span class="n">'+esc(n)+'</span></div>'}
 function ic(u){try{var h=new URL(u).hostname;return'<img class="ic" alt="" loading="lazy" src="https://www.google.com/s2/favicons?domain='+esc(h)+'&sz=64" onerror="this.style.visibility=\'hidden\'">'}catch(e){return'<span class="ic"></span>'}}
-function tip(h,a,p){var p1=p[0],px=p[1],p2=p[2];
- if(p1>=55)return"Vitória do "+h+" ("+Math.round(p1)+"%)";
- if(p2>=55)return"Vitória do "+a+" ("+Math.round(p2)+"%)";
- if(p1>=p2)return"Dupla hipótese 1X: "+h+" ou empate ("+Math.round(p1+px)+"%)";
- return"Dupla hipótese X2: empate ou "+a+" ("+Math.round(p2+px)+"%)"}
 function group(list,fn){var out="",last="";list.forEach(function(m){var l=dayLabel(m.utc);if(l!==last){out+="<h2>"+esc(l)+"</h2>";last=l}out+=fn(m)});return out}
 function card(m,withTip){var live=m.status==="IN_PLAY"||m.status==="PAUSED",fin=m.status==="FINISHED",mid;
  if(fin)mid='<div class="sc">'+m.hs+' – '+m.as+'<small>Fim</small></div>';
  else if(live)mid='<div class="sc lv">'+m.hs+' – '+m.as+'<small class="lv">AO VIVO</small></div>';
  else mid='<div class="sc t">'+hr(m.utc)+'</div>';
  var p=m.prob,extra="";
- if(withTip&&p)extra='<div class="bar"><i class="b1" style="width:'+p[0]+'%"></i><i class="bx" style="width:'+p[1]+'%"></i><i class="b2" style="width:'+p[2]+'%"></i></div><div class="pl"><span>1 · '+Math.round(p[0])+'%</span><span>X · '+Math.round(p[1])+'%</span><span>2 · '+Math.round(p[2])+'%</span></div><div class="tip"><b>DICA</b><span>'+esc(tip(m.home,m.away,p))+'</span></div>';
+ if(withTip&&p&&!live){
+  extra='<div class="bar"><i class="b1" style="width:'+p[0]+'%"></i><i class="bx" style="width:'+p[1]+'%"></i><i class="b2" style="width:'+p[2]+'%"></i></div><div class="pl"><span>1 · '+Math.round(p[0])+'%</span><span>X · '+Math.round(p[1])+'%</span><span>2 · '+Math.round(p[2])+'%</span></div>';
+  if(m.xg)extra+='<div class="xg">Golos esperados: '+m.xg[0].toFixed(1)+' – '+m.xg[1].toFixed(1)+'</div>';
+  if(m.tips)extra+='<div class="tps">'+m.tips.map(function(t){return'<div class="tp"><b>'+esc(t.k)+'</b><span>'+esc(t.t)+'</span><span class="pc">'+t.p+'%</span></div>'}).join("")+'</div>'}
  return'<div class="m"><div class="lg">'+esc(m.comp)+'</div><div class="g">'+team(m.home)+mid+team(m.away)+'</div>'+extra+'</div>'}
 fetch("/api/matches").then(function(r){return r.json()}).then(function(M){
  if(M.some(function(m){return m.status==="IN_PLAY"||m.status==="PAUSED"}))$("live").classList.add("on");
