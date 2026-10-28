@@ -53,7 +53,7 @@ fetch("/api/matches").then(function(r){return r.json()}).then(function(M){
   return'<div class="card"><div class="row"><span class="t">'+esc(m.home)+'</span><span class="meta" style="margin:0">'+(live?"AO VIVO "+m.hs+"–"+m.as:dt(m.utc)+" · "+hr(m.utc))+'</span><span class="t r">'+esc(m.away)+'</span></div><div class="meta">'+esc(m.comp)+'</div>'+b+'</div>'}).join(""):"Sem jogos agendados.";
 }).catch(function(){$("resL").textContent=$("dicL").textContent="Não foi possível carregar os jogos."});
 fetch("/api/news").then(function(r){return r.json()}).then(function(N){
- var re=/transfer|sign|deal|bid|loan|contrat|reforço|rumor/i;
+ var re=/transfer|reforç|contrat|empréstimo|rumor|negócio|assina|rescis/i;
  function L(a){return a.length?a.slice(0,15).map(function(n){return'<div class="card"><a class="n" href="'+esc(n.link)+'" target="_blank" rel="noopener">'+esc(n.title)+'</a><div class="meta">'+esc(n.src)+'</div></div>'}).join(""):"Sem notícias."}
  $("traL").innerHTML=L(N.filter(function(n){return re.test(n.title)}));
  $("focL").innerHTML=L(N.filter(function(n){return!re.test(n.title)}));
