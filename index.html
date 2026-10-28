@@ -4,67 +4,79 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#070b09">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>⚽</text></svg>">
 <title>Bola Quente – Futebol em direto</title>
 <style>
 :root{--bg:#070b09;--card:#101713;--card2:#16211b;--bd:#1d2c23;--tx:#eef5f0;--mut:#8aa196;--g:#39ff88;--r:#ff5a4d;color-scheme:dark}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:radial-gradient(900px 400px at 50% -120px,#0f2a1b,var(--bg));background-color:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-top:calc(76px + env(safe-area-inset-top,0));padding-bottom:110px}
+body{margin:0;background-color:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-top:calc(76px + env(safe-area-inset-top,0));padding-bottom:60px;font-variant-numeric:tabular-nums}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(700px 380px at 15% -80px,rgba(57,255,136,.16),transparent),radial-gradient(600px 400px at 100% 60%,rgba(20,120,90,.10),transparent)}
 header,main{max-width:720px;margin:0 auto;padding:0 16px}
-header{padding-top:12px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-weight:900;font-size:22px;letter-spacing:-.5px}.logo b{color:var(--g);text-shadow:0 0 18px rgba(57,255,136,.55)}
-.live{display:none;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--r);background:rgba(255,90,77,.12);padding:5px 10px;border-radius:99px}
-.live.on{display:flex}.dot{width:7px;height:7px;border-radius:50%;background:var(--r);animation:p 1.2s infinite}
+header{padding-top:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.logo{font-weight:900;font-size:24px;letter-spacing:-.5px}.logo b{color:var(--g);text-shadow:0 0 22px rgba(57,255,136,.6)}
+.live{display:none;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--r);background:rgba(255,90,77,.12);border:1px solid rgba(255,90,77,.3);padding:6px 11px;border-radius:99px;white-space:nowrap}
+.live.on{display:flex}.dot{width:7px;height:7px;border-radius:50%;background:var(--r);box-shadow:0 0 8px var(--r);animation:p 1.2s infinite}
 @keyframes p{50%{opacity:.25}}
 .sub{color:var(--mut);font-size:13px;margin:4px 0 0}
-section{display:none}section.on{display:block;animation:f .25s}
-@keyframes f{from{opacity:0;transform:translateY(6px)}}
-h2{font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--g);margin:22px 0 10px}
-.m{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--bd);border-radius:18px;padding:14px;margin-bottom:10px}
-.lg{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--mut);margin-bottom:10px}
+section{display:none}section.on{display:block;animation:f .3s}
+@keyframes f{from{opacity:0;transform:translateY(8px)}}
+h2{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--g);margin:24px 0 12px}
+h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--bd),transparent)}
+.m{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--bd);border-radius:20px;padding:15px;margin-bottom:12px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.m.live{border-color:rgba(255,90,77,.45);box-shadow:0 0 0 1px rgba(255,90,77,.12),0 10px 34px rgba(255,90,77,.10)}
+.lg{display:flex;align-items:center;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--mut);margin-bottom:12px}
+.lg::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--g);margin-right:8px;box-shadow:0 0 8px var(--g)}
 .g{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;text-align:center}
-.tm{display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:700;font-size:14px;min-width:0}
+.tm{display:flex;flex-direction:column;align-items:center;gap:7px;font-weight:700;font-size:14px;min-width:0}
 .tm span.n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
-.cr{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:13px;background:hsl(var(--h) 45% 20%);color:hsl(var(--h) 85% 72%);border:1px solid hsl(var(--h) 45% 32%)}
-.sc{font-weight:900;font-size:26px;letter-spacing:1px;min-width:84px}
-.sc.t{font-size:18px;color:var(--g)}.sc small{display:block;font-size:11px;font-weight:700;color:var(--mut);letter-spacing:0}
+.cr{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:13px;background:linear-gradient(145deg,hsl(var(--h) 45% 26%),hsl(var(--h) 45% 14%));color:hsl(var(--h) 90% 78%);border:1px solid hsl(var(--h) 45% 34%);box-shadow:0 4px 14px hsl(var(--h) 60% 10% / .6)}
+.sc{font-weight:900;font-size:28px;letter-spacing:1px;min-width:90px}
+.sc.t{font-size:19px;color:var(--g)}.sc small{display:block;font-size:11px;font-weight:700;color:var(--mut);letter-spacing:.4px}
+.sc small.lv{color:var(--r)}
 .lv{color:var(--r)}
-.bar{display:flex;height:7px;border-radius:99px;overflow:hidden;margin:14px 0 6px;background:var(--bd);gap:2px}
-.bar i{display:block}.b1{background:var(--g);box-shadow:0 0 10px rgba(57,255,136,.5)}.bx{background:#5d7066}.b2{background:var(--r)}
+.bar{display:flex;height:8px;border-radius:99px;overflow:hidden;margin:16px 0 7px;background:var(--bd);gap:2px}
+.bar i{display:block}.b1{background:var(--g);box-shadow:0 0 12px rgba(57,255,136,.55)}.bx{background:#5d7066}.b2{background:var(--r)}
 .pl{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);font-weight:600}
-.xg{text-align:center;font-size:12px;color:var(--mut);margin-top:8px}
-.tps{margin-top:12px;display:grid;gap:6px}
-.tp{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;background:rgba(57,255,136,.07);border:1px solid rgba(57,255,136,.22);border-radius:12px;padding:9px 12px;font-size:14px}
+.xg{text-align:center;font-size:12px;color:var(--mut);margin-top:9px}
+.tps{margin-top:12px;display:grid;gap:7px}
+.tp{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;border:1px solid rgba(57,255,136,.22);border-radius:12px;padding:10px 12px;font-size:14px;background:linear-gradient(90deg,rgba(57,255,136,.22) var(--p),rgba(57,255,136,.05) var(--p))}
 .tp b{background:var(--g);color:#04210f;font-size:10px;font-weight:900;letter-spacing:.5px;padding:3px 7px;border-radius:6px;text-transform:uppercase;white-space:nowrap}
 .tp .pc{font-weight:900;color:var(--g)}
-a.n{display:flex;gap:12px;align-items:flex-start;text-decoration:none;color:var(--tx);background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:10px}
+a.n{display:flex;gap:12px;align-items:flex-start;text-decoration:none;color:var(--tx);background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--bd);border-radius:18px;padding:14px;margin-bottom:11px;box-shadow:0 8px 24px rgba(0,0,0,.2)}
 a.n:active{border-color:var(--g)}a.n strong{display:block;font-size:16px;line-height:1.3;margin-top:8px}
-.ic{width:42px;height:42px;flex:none;border-radius:10px;background:#fff;padding:5px;object-fit:contain}
+section a.n:first-of-type{border-color:rgba(57,255,136,.35);background:linear-gradient(135deg,rgba(57,255,136,.12),var(--card))}
+section a.n:first-of-type strong{font-size:18px}
+.ic{width:42px;height:42px;flex:none;border-radius:11px;background:#fff;padding:5px;object-fit:contain}
 span.ic{background:var(--card2);border:1px solid var(--bd)}
 .nb{min-width:0;flex:1}
 .src{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut)}.src em{font-style:normal;font-weight:800;color:var(--g);background:rgba(57,255,136,.1);padding:2px 8px;border-radius:6px}
-.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px}
-.chips button{flex:none;background:var(--card2);border:1px solid var(--bd);color:var(--tx);padding:8px 14px;border-radius:99px;font:inherit;font-size:13px;font-weight:700}
-.chips button.on{background:var(--g);color:#04210f;border-color:var(--g)}
-.tb{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--bd);border-radius:18px;overflow:hidden}
-.tr{display:grid;grid-template-columns:22px 1fr 22px 22px 22px 22px 30px 30px;gap:4px;align-items:center;padding:9px 12px;font-size:13px;border-top:1px solid var(--bd)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 14px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;background:var(--card2);border:1px solid var(--bd);color:var(--tx);padding:9px 15px;border-radius:99px;font:inherit;font-size:13px;font-weight:700}
+.chips button.on{background:var(--g);color:#04210f;border-color:var(--g);box-shadow:0 0 18px rgba(57,255,136,.35)}
+.tb{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--bd);border-radius:20px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.tr{display:grid;grid-template-columns:22px 1fr 22px 22px 22px 22px 30px 30px;gap:4px;align-items:center;padding:10px 12px;font-size:13px;border-top:1px solid var(--bd)}
+.tr:nth-child(even){background:rgba(255,255,255,.015)}
+.tr.top{box-shadow:inset 3px 0 0 var(--g)}.tr.bot{box-shadow:inset 3px 0 0 var(--r)}
 .tr.h{font-size:11px;color:var(--mut);font-weight:800;border-top:0;background:var(--card2)}
 .tr span{text-align:center}.tr .tn{text-align:left;display:flex;align-items:center;gap:8px;min-width:0;font-weight:700}
 .tn img{width:20px;height:20px;object-fit:contain;flex:none}.tn b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
 .tr .pt{font-weight:900;color:var(--g)}
-.sk{height:96px;border-radius:18px;margin-bottom:10px;background:linear-gradient(90deg,var(--card),var(--card2),var(--card));background-size:200% 100%;animation:s 1.2s infinite}
+.sk{height:96px;border-radius:20px;margin-bottom:12px;background:linear-gradient(90deg,var(--card),var(--card2),var(--card));background-size:200% 100%;animation:s 1.2s infinite}
 @keyframes s{to{background-position:-200% 0}}
 .em{color:var(--mut);padding:30px 0;text-align:center}
-.warn{font-size:12px;color:var(--mut);margin:26px 0;line-height:1.5}
-nav{position:fixed;left:0;right:0;top:0;background:rgba(10,16,13,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);padding:calc(6px + env(safe-area-inset-top,0)) 8px 6px;display:flex;justify-content:center;z-index:9}
+.warn{font-size:12px;color:var(--mut);margin:28px 0;line-height:1.5;border-top:1px solid var(--bd);padding-top:16px}
+nav{position:fixed;left:0;right:0;top:0;background:rgba(8,13,10,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);padding:calc(6px + env(safe-area-inset-top,0)) 8px 6px;display:flex;justify-content:center;z-index:9}
 nav div{display:flex;max-width:720px;width:100%}
-nav button{flex:1;background:none;border:0;color:var(--mut);font:inherit;font-size:11px;font-weight:700;padding:4px 0;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button{position:relative;flex:1;background:none;border:0;color:var(--mut);font:inherit;font-size:11px;font-weight:700;padding:4px 0 7px;display:flex;flex-direction:column;align-items:center;gap:2px}
 nav button span{font-size:20px;filter:grayscale(1) opacity(.7)}
 nav button.on{color:var(--g)}nav button.on span{filter:none;text-shadow:0 0 12px var(--g)}
+nav button.on::after{content:"";position:absolute;bottom:0;width:22px;height:3px;border-radius:3px;background:var(--g);box-shadow:0 0 10px var(--g)}
 </style>
 </head>
 <body>
 <nav><div id="nav"><button class="on" data-s="res"><span>📊</span>Jogos</button><button data-s="dic"><span>🎯</span>Dicas</button><button data-s="tab"><span>🏆</span>Tabela</button><button data-s="tra"><span>🔁</span>Mercado</button><button data-s="foc"><span>🔥</span>Em foco</button></div></nav>
-<header><div><div class="logo">BOLA <b>QUENTE</b> ⚽</div><p class="sub">Resultados, dicas e notícias. Atualiza sozinho.</p></div><div class="live" id="live"><i class="dot"></i>AO VIVO</div></header>
+<header><div><div class="logo">BOLA <b>QUENTE</b> ⚽</div><p class="sub">Resultados, dicas e notícias · <span id="upd">atualiza sozinho</span></p></div><div class="live" id="live"><i class="dot"></i>AO VIVO</div></header>
 <main>
 <section id="res" class="on"><div id="resL"><div class="sk"></div><div class="sk"></div></div></section>
 <section id="dic"><p class="sub" style="margin-top:14px">Estimativas estatísticas baseadas nos golos e na classificação de cada equipa. Não são garantias.</p><div id="dicL"><div class="sk"></div><div class="sk"></div></div></section>
@@ -92,22 +104,24 @@ function card(m,withTip){var live=m.status==="IN_PLAY"||m.status==="PAUSED",fin=
  if(withTip&&p&&!live){
   extra='<div class="bar"><i class="b1" style="width:'+p[0]+'%"></i><i class="bx" style="width:'+p[1]+'%"></i><i class="b2" style="width:'+p[2]+'%"></i></div><div class="pl"><span>1 · '+Math.round(p[0])+'%</span><span>X · '+Math.round(p[1])+'%</span><span>2 · '+Math.round(p[2])+'%</span></div>';
   if(m.xg)extra+='<div class="xg">Golos esperados: '+m.xg[0].toFixed(1)+' – '+m.xg[1].toFixed(1)+'</div>';
-  if(m.tips)extra+='<div class="tps">'+m.tips.map(function(t){return'<div class="tp"><b>'+esc(t.k)+'</b><span>'+esc(t.t)+'</span><span class="pc">'+t.p+'%</span></div>'}).join("")+'</div>'}
- return'<div class="m"><div class="lg">'+esc(m.comp)+'</div><div class="g">'+team(m.home)+mid+team(m.away)+'</div>'+extra+'</div>'}
-fetch("/api/matches").then(function(r){return r.json()}).then(function(M){
- if(M.some(function(m){return m.status==="IN_PLAY"||m.status==="PAUSED"}))$("live").classList.add("on");
+  if(m.tips)extra+='<div class="tps">'+m.tips.map(function(t){return'<div class="tp" style="--p:'+t.p+'%"><b>'+esc(t.k)+'</b><span>'+esc(t.t)+'</span><span class="pc">'+t.p+'%</span></div>'}).join("")+'</div>'}
+ return'<div class="m'+(live?" live":"")+'"><div class="lg">'+esc(m.comp)+'</div><div class="g">'+team(m.home)+mid+team(m.away)+'</div>'+extra+'</div>'}
+function loadM(){fetch("/api/matches").then(function(r){return r.json()}).then(function(M){
  var now=M.filter(function(m){return m.status==="IN_PLAY"||m.status==="PAUSED"});
+ $("live").classList.toggle("on",now.length>0);
  var fin=M.filter(function(m){return m.status==="FINISHED"}).sort(function(a,b){return a.utc<b.utc?1:-1});
- var up=M.filter(function(m){return m.status!=="FINISHED"}).sort(function(a,b){return a.utc<b.utc?-1:1});
+ var up=M.filter(function(m){return m.status!=="FINISHED"&&m.status!=="IN_PLAY"&&m.status!=="PAUSED"}).sort(function(a,b){return a.utc<b.utc?-1:1});
  $("resL").innerHTML=(now.length?"<h2>Agora</h2>"+now.map(function(m){return card(m,false)}).join(""):"")+(fin.length?group(fin,function(m){return card(m,false)}):'<div class="em">Sem resultados recentes.</div>');
- $("dicL").innerHTML=up.length?group(up,function(m){return card(m,true)}):'<div class="em">Sem jogos agendados.</div>';
-}).catch(function(){$("resL").innerHTML=$("dicL").innerHTML='<div class="em">Não foi possível carregar os jogos.</div>'});
+ $("dicL").innerHTML=up.length?group(up,function(m){return card(m,true)}):'<div class="em">Sem jogos por começar.</div>';
+ $("upd").textContent="atualizado às "+hr(new Date());
+}).catch(function(){$("resL").innerHTML=$("dicL").innerHTML='<div class="em">Não foi possível carregar os jogos.</div>'})}
+loadM();setInterval(loadM,120000);
 fetch("/api/standings").then(function(r){return r.json()}).then(function(S){
  var keys=["PPL","PL","PD","SA","BL1","FL1"].filter(function(k){return S[k]});
  if(!keys.length){$("tabL").innerHTML='<div class="em">Classificações indisponíveis de momento.</div>';return}
  function show(k){
   document.querySelectorAll("#chips button").forEach(function(b){b.classList.toggle("on",b.dataset.k===k)});
-  $("tabL").innerHTML='<div class="tb"><div class="tr h"><span>#</span><span class="tn">Equipa</span><span>J</span><span>V</span><span>E</span><span>D</span><span>DG</span><span>Pts</span></div>'+S[k].table.map(function(r){return'<div class="tr"><span>'+r.p+'</span><span class="tn">'+(r.c?'<img alt="" loading="lazy" src="'+esc(r.c)+'" onerror="this.style.visibility=\'hidden\'">':"")+'<b>'+esc(r.t)+'</b></span><span>'+r.j+'</span><span>'+r.v+'</span><span>'+r.e+'</span><span>'+r.d+'</span><span>'+(r.dg>0?"+":"")+r.dg+'</span><span class="pt">'+r.pts+'</span></div>'}).join("")+'</div>'}
+  $("tabL").innerHTML='<div class="tb"><div class="tr h"><span>#</span><span class="tn">Equipa</span><span>J</span><span>V</span><span>E</span><span>D</span><span>DG</span><span>Pts</span></div>'+S[k].table.map(function(r,i,a){var n=a.length,cls=r.p<=4?" top":(r.p>n-(n>=20?3:2)?" bot":"");return'<div class="tr'+cls+'"><span>'+r.p+'</span><span class="tn">'+(r.c?'<img alt="" loading="lazy" src="'+esc(r.c)+'" onerror="this.style.visibility=\'hidden\'">':"")+'<b>'+esc(r.t)+'</b></span><span>'+r.j+'</span><span>'+r.v+'</span><span>'+r.e+'</span><span>'+r.d+'</span><span>'+(r.dg>0?"+":"")+r.dg+'</span><span class="pt">'+r.pts+'</span></div>'}).join("")+'</div>'}
  $("chips").innerHTML=keys.map(function(k){return'<button data-k="'+k+'">'+esc(S[k].name)+'</button>'}).join("");
  $("chips").onclick=function(e){var b=e.target.closest("button");if(b)show(b.dataset.k)};
  show(keys[0]);
