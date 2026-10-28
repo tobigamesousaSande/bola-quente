@@ -39,6 +39,15 @@ a.n:active{border-color:var(--g)}a.n strong{display:block;font-size:16px;line-he
 span.ic{background:var(--card2);border:1px solid var(--bd)}
 .nb{min-width:0;flex:1}
 .src{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut)}.src em{font-style:normal;font-weight:800;color:var(--g);background:rgba(57,255,136,.1);padding:2px 8px;border-radius:6px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px}
+.chips button{flex:none;background:var(--card2);border:1px solid var(--bd);color:var(--tx);padding:8px 14px;border-radius:99px;font:inherit;font-size:13px;font-weight:700}
+.chips button.on{background:var(--g);color:#04210f;border-color:var(--g)}
+.tb{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--bd);border-radius:18px;overflow:hidden}
+.tr{display:grid;grid-template-columns:22px 1fr 22px 22px 22px 22px 30px 30px;gap:4px;align-items:center;padding:9px 12px;font-size:13px;border-top:1px solid var(--bd)}
+.tr.h{font-size:11px;color:var(--mut);font-weight:800;border-top:0;background:var(--card2)}
+.tr span{text-align:center}.tr .tn{text-align:left;display:flex;align-items:center;gap:8px;min-width:0;font-weight:700}
+.tn img{width:20px;height:20px;object-fit:contain;flex:none}.tn b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}
+.tr .pt{font-weight:900;color:var(--g)}
 .sk{height:96px;border-radius:18px;margin-bottom:10px;background:linear-gradient(90deg,var(--card),var(--card2),var(--card));background-size:200% 100%;animation:s 1.2s infinite}
 @keyframes s{to{background-position:-200% 0}}
 .em{color:var(--mut);padding:30px 0;text-align:center}
@@ -51,11 +60,12 @@ nav button.on{color:var(--g)}nav button.on span{filter:none;text-shadow:0 0 12px
 </style>
 </head>
 <body>
-<nav><div id="nav"><button class="on" data-s="res"><span>📊</span>Resultados</button><button data-s="dic"><span>🎯</span>Dicas</button><button data-s="tra"><span>🔁</span>Mercado</button><button data-s="foc"><span>🔥</span>Em foco</button></div></nav>
+<nav><div id="nav"><button class="on" data-s="res"><span>📊</span>Jogos</button><button data-s="dic"><span>🎯</span>Dicas</button><button data-s="tab"><span>🏆</span>Tabela</button><button data-s="tra"><span>🔁</span>Mercado</button><button data-s="foc"><span>🔥</span>Em foco</button></div></nav>
 <header><div><div class="logo">BOLA <b>QUENTE</b> ⚽</div><p class="sub">Resultados, dicas e notícias. Atualiza sozinho.</p></div><div class="live" id="live"><i class="dot"></i>AO VIVO</div></header>
 <main>
 <section id="res" class="on"><div id="resL"><div class="sk"></div><div class="sk"></div></div></section>
 <section id="dic"><p class="sub" style="margin-top:14px">Estimativa simples baseada na classificação. Não são garantias.</p><div id="dicL"><div class="sk"></div><div class="sk"></div></div></section>
+<section id="tab"><h2>Classificação</h2><div class="chips" id="chips"></div><div id="tabL"><div class="sk"></div></div></section>
 <section id="tra"><h2>Transferências</h2><div id="traL"><div class="sk"></div></div></section>
 <section id="foc"><h2>Em foco</h2><div id="focL"><div class="sk"></div><div class="sk"></div></div></section>
 <p class="warn">+18 · Apostar envolve risco de perda. Joga com responsabilidade e só com dinheiro que podes perder. As dicas são apenas informativas. Notícias: títulos e ligações das fontes originais.</p>
@@ -91,6 +101,16 @@ fetch("/api/matches").then(function(r){return r.json()}).then(function(M){
  $("resL").innerHTML=(now.length?"<h2>Agora</h2>"+now.map(function(m){return card(m,false)}).join(""):"")+(fin.length?group(fin,function(m){return card(m,false)}):'<div class="em">Sem resultados recentes.</div>');
  $("dicL").innerHTML=up.length?group(up,function(m){return card(m,true)}):'<div class="em">Sem jogos agendados.</div>';
 }).catch(function(){$("resL").innerHTML=$("dicL").innerHTML='<div class="em">Não foi possível carregar os jogos.</div>'});
+fetch("/api/standings").then(function(r){return r.json()}).then(function(S){
+ var keys=["PPL","PL","PD","SA","BL1","FL1"].filter(function(k){return S[k]});
+ if(!keys.length){$("tabL").innerHTML='<div class="em">Classificações indisponíveis de momento.</div>';return}
+ function show(k){
+  document.querySelectorAll("#chips button").forEach(function(b){b.classList.toggle("on",b.dataset.k===k)});
+  $("tabL").innerHTML='<div class="tb"><div class="tr h"><span>#</span><span class="tn">Equipa</span><span>J</span><span>V</span><span>E</span><span>D</span><span>DG</span><span>Pts</span></div>'+S[k].table.map(function(r){return'<div class="tr"><span>'+r.p+'</span><span class="tn">'+(r.c?'<img alt="" loading="lazy" src="'+esc(r.c)+'" onerror="this.style.visibility=\'hidden\'">':"")+'<b>'+esc(r.t)+'</b></span><span>'+r.j+'</span><span>'+r.v+'</span><span>'+r.e+'</span><span>'+r.d+'</span><span>'+(r.dg>0?"+":"")+r.dg+'</span><span class="pt">'+r.pts+'</span></div>'}).join("")+'</div>'}
+ $("chips").innerHTML=keys.map(function(k){return'<button data-k="'+k+'">'+esc(S[k].name)+'</button>'}).join("");
+ $("chips").onclick=function(e){var b=e.target.closest("button");if(b)show(b.dataset.k)};
+ show(keys[0]);
+}).catch(function(){$("tabL").innerHTML='<div class="em">Não foi possível carregar a classificação.</div>'});
 fetch("/api/news").then(function(r){return r.json()}).then(function(N){
  var re=/transfer|reforç|contrat|empréstimo|rumor|negócio|assina|rescis/i;
  function L(a){return a.length?a.slice(0,20).map(function(n){return'<a class="n" href="'+esc(n.link)+'" target="_blank" rel="noopener">'+ic(n.site)+'<div class="nb"><div class="src"><em>'+esc(n.src)+'</em>'+ago(n.date)+'</div><strong>'+esc(n.title)+'</strong></div></a>'}).join(""):'<div class="em">Sem notícias.</div>'}
