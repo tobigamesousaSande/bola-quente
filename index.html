@@ -33,8 +33,11 @@ h2{font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;
 .pl{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);font-weight:600}
 .tip{margin-top:12px;display:flex;gap:8px;align-items:center;background:rgba(57,255,136,.08);border:1px solid rgba(57,255,136,.25);border-radius:12px;padding:9px 12px;font-size:14px}
 .tip b{background:var(--g);color:#04210f;font-size:11px;font-weight:900;letter-spacing:.6px;padding:3px 7px;border-radius:6px}
-a.n{display:block;text-decoration:none;color:var(--tx);background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:10px}
+a.n{display:flex;gap:12px;align-items:flex-start;text-decoration:none;color:var(--tx);background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:10px}
 a.n:active{border-color:var(--g)}a.n strong{display:block;font-size:16px;line-height:1.3;margin-top:8px}
+.ic{width:42px;height:42px;flex:none;border-radius:10px;background:#fff;padding:5px;object-fit:contain}
+span.ic{background:var(--card2);border:1px solid var(--bd)}
+.nb{min-width:0;flex:1}
 .src{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--mut)}.src em{font-style:normal;font-weight:800;color:var(--g);background:rgba(57,255,136,.1);padding:2px 8px;border-radius:6px}
 .sk{height:96px;border-radius:18px;margin-bottom:10px;background:linear-gradient(90deg,var(--card),var(--card2),var(--card));background-size:200% 100%;animation:s 1.2s infinite}
 @keyframes s{to{background-position:-200% 0}}
@@ -66,6 +69,7 @@ function dayLabel(u){var d=new Date(u),t=new Date(),k=function(x){return x.toDat
  if(k(d)===k(t))return"Hoje";if(k(d)===o(-1))return"Ontem";if(k(d)===o(1))return"Amanhã";return d.toLocaleDateString("pt-PT",{weekday:"long",day:"numeric",month:"long"})}
 function crest(n){var h=0,i;for(i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))%360;return'<span class="cr" style="--h:'+h+'">'+esc(n.replace(/[^A-Za-zÀ-ÿ ]/g,"").trim().slice(0,3).toUpperCase())+'</span>'}
 function team(n){return'<div class="tm">'+crest(n)+'<span class="n">'+esc(n)+'</span></div>'}
+function ic(u){try{var h=new URL(u).hostname;return'<img class="ic" alt="" loading="lazy" src="https://www.google.com/s2/favicons?domain='+esc(h)+'&sz=64" onerror="this.style.visibility=\'hidden\'">'}catch(e){return'<span class="ic"></span>'}}
 function tip(h,a,p){var p1=p[0],px=p[1],p2=p[2];
  if(p1>=55)return"Vitória do "+h+" ("+Math.round(p1)+"%)";
  if(p2>=55)return"Vitória do "+a+" ("+Math.round(p2)+"%)";
@@ -89,7 +93,7 @@ fetch("/api/matches").then(function(r){return r.json()}).then(function(M){
 }).catch(function(){$("resL").innerHTML=$("dicL").innerHTML='<div class="em">Não foi possível carregar os jogos.</div>'});
 fetch("/api/news").then(function(r){return r.json()}).then(function(N){
  var re=/transfer|reforç|contrat|empréstimo|rumor|negócio|assina|rescis/i;
- function L(a){return a.length?a.slice(0,20).map(function(n){return'<a class="n" href="'+esc(n.link)+'" target="_blank" rel="noopener"><div class="src"><em>'+esc(n.src)+'</em>'+ago(n.date)+'</div><strong>'+esc(n.title)+'</strong></a>'}).join(""):'<div class="em">Sem notícias.</div>'}
+ function L(a){return a.length?a.slice(0,20).map(function(n){return'<a class="n" href="'+esc(n.link)+'" target="_blank" rel="noopener">'+ic(n.site)+'<div class="nb"><div class="src"><em>'+esc(n.src)+'</em>'+ago(n.date)+'</div><strong>'+esc(n.title)+'</strong></div></a>'}).join(""):'<div class="em">Sem notícias.</div>'}
  $("traL").innerHTML=L(N.filter(function(n){return re.test(n.title)}));
  $("focL").innerHTML=L(N.filter(function(n){return!re.test(n.title)}));
 }).catch(function(){$("traL").innerHTML=$("focL").innerHTML='<div class="em">Não foi possível carregar as notícias.</div>'});
