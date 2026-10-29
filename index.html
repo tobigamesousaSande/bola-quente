@@ -23,7 +23,7 @@ section{display:none}section.on{display:block;animation:f .3s}
 h2{display:flex;align-items:center;gap:10px;font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--g);margin:24px 0 12px}
 h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--bd),transparent)}
 .m{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--bd);border-radius:20px;padding:15px;margin-bottom:12px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-.m.live{border-color:rgba(255,90,77,.45);box-shadow:0 0 0 1px rgba(255,90,77,.12),0 10px 34px rgba(255,90,77,.10)}
+.m.hot{border-color:rgba(255,90,77,.45);box-shadow:0 0 0 1px rgba(255,90,77,.12),0 10px 34px rgba(255,90,77,.10)}
 .lg{display:flex;align-items:center;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--mut);margin-bottom:12px}
 .lg::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--g);margin-right:8px;box-shadow:0 0 8px var(--g)}
 .g{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;text-align:center}
@@ -105,7 +105,7 @@ function card(m,withTip){var live=m.status==="IN_PLAY"||m.status==="PAUSED",fin=
   extra='<div class="bar"><i class="b1" style="width:'+p[0]+'%"></i><i class="bx" style="width:'+p[1]+'%"></i><i class="b2" style="width:'+p[2]+'%"></i></div><div class="pl"><span>1 · '+Math.round(p[0])+'%</span><span>X · '+Math.round(p[1])+'%</span><span>2 · '+Math.round(p[2])+'%</span></div>';
   if(m.xg)extra+='<div class="xg">Golos esperados: '+m.xg[0].toFixed(1)+' – '+m.xg[1].toFixed(1)+'</div>';
   if(m.tips)extra+='<div class="tps">'+m.tips.map(function(t){return'<div class="tp" style="--p:'+t.p+'%"><b>'+esc(t.k)+'</b><span>'+esc(t.t)+'</span><span class="pc">'+t.p+'%</span></div>'}).join("")+'</div>'}
- return'<div class="m'+(live?" live":"")+'"><div class="lg">'+esc(m.comp)+'</div><div class="g">'+team(m.home)+mid+team(m.away)+'</div>'+extra+'</div>'}
+ return'<div class="m'+(live?" hot":"")+'"><div class="lg">'+esc(m.comp)+'</div><div class="g">'+team(m.home)+mid+team(m.away)+'</div>'+extra+'</div>'}
 function loadM(){fetch("/api/matches").then(function(r){return r.json()}).then(function(M){
  var now=M.filter(function(m){return m.status==="IN_PLAY"||m.status==="PAUSED"});
  $("live").classList.toggle("on",now.length>0);
