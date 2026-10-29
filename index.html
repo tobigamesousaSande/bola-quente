@@ -78,8 +78,8 @@ nav button.on::after{content:"";position:absolute;bottom:0;width:22px;height:3px
 <nav><div id="nav"><button class="on" data-s="res"><span>📊</span>Jogos</button><button data-s="dic"><span>🎯</span>Dicas</button><button data-s="tab"><span>🏆</span>Tabela</button><button data-s="tra"><span>🔁</span>Mercado</button><button data-s="foc"><span>🔥</span>Em foco</button></div></nav>
 <header><div><div class="logo">BOLA <b>QUENTE</b> ⚽</div><p class="sub">Resultados, dicas e notícias · <span id="upd">atualiza sozinho</span></p></div><div class="live" id="live"><i class="dot"></i>AO VIVO</div></header>
 <main>
-<section id="res" class="on"><div id="resL"><div class="sk"></div><div class="sk"></div></div></section>
-<section id="dic"><p class="sub" style="margin-top:14px">Estimativas estatísticas baseadas nos golos e na classificação de cada equipa. Não são garantias.</p><div id="dicL"><div class="sk"></div><div class="sk"></div></div></section>
+<section id="res" class="on"><div class="chips" id="chipsJ" style="margin-top:16px"></div><div id="resL"><div class="sk"></div><div class="sk"></div></div></section>
+<section id="dic"><p class="sub" style="margin-top:14px">Estimativas estatísticas baseadas nos golos e na classificação de cada equipa. Não são garantias.</p><div class="chips" id="chipsD" style="margin-top:14px"></div><div id="dicL"><div class="sk"></div><div class="sk"></div></div></section>
 <section id="tab"><h2>Classificação</h2><div class="chips" id="chips"></div><div id="tabL"><div class="sk"></div></div></section>
 <section id="tra"><h2>Transferências</h2><div id="traL"><div class="sk"></div></div></section>
 <section id="foc"><h2>Em foco</h2><div id="focL"><div class="sk"></div><div class="sk"></div></div></section>
@@ -96,7 +96,16 @@ function crest(n){var h=0,i;for(i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))%360;
 function team(n){return'<div class="tm">'+crest(n)+'<span class="n">'+esc(n)+'</span></div>'}
 function ic(u){try{var h=new URL(u).hostname;return'<img class="ic" alt="" loading="lazy" src="https://www.google.com/s2/favicons?domain='+esc(h)+'&sz=64" onerror="this.style.visibility=\'hidden\'">'}catch(e){return'<span class="ic"></span>'}}
 function group(list,fn){var out="",last="";list.forEach(function(m){var l=dayLabel(m.utc);if(l!==last){out+="<h2>"+esc(l)+"</h2>";last=l}out+=fn(m)});return out}
-function card(m,withTip){var live=m.status==="IN_PLAY"||m.status==="PAUSED",fin=m.status==="FINISHED",mid;
+function isLive(m){return m.status==="IN_PLAY"||m.status==="PAUSED"}
+function lname(c){return c==="Primeira Liga"?"Liga Portugal":c==="Primera Division"?"La Liga":c==="UEFA Champions League"?"Champions League":c}
+var ORD=["Liga Portugal","Premier League","La Liga","Serie A","Bundesliga","Ligue 1","Champions League"];
+var M=[],fJ="all",fD="all";
+function chipsHtml(list,cur){
+ var ls=ORD.filter(function(l){return list.some(function(m){return m.l===l})});
+ list.forEach(function(m){if(ls.indexOf(m.l)<0)ls.push(m.l)});
+ if(!ls.length)return"";
+ return'<button data-k="all"'+(cur==="all"?' class="on"':"")+'>Todas</button>'+ls.map(function(l){return'<button data-k="'+esc(l)+'"'+(cur===l?' class="on"':"")+'>'+esc(l)+'</button>'}).join("")}
+function card(m,withTip){var live=isLive(m),fin=m.status==="FINISHED",mid;
  if(fin)mid='<div class="sc">'+m.hs+' – '+m.as+'<small>Fim</small></div>';
  else if(live)mid='<div class="sc lv">'+m.hs+' – '+m.as+'<small class="lv">AO VIVO</small></div>';
  else mid='<div class="sc t">'+hr(m.utc)+'</div>';
@@ -105,14 +114,26 @@ function card(m,withTip){var live=m.status==="IN_PLAY"||m.status==="PAUSED",fin=
   extra='<div class="bar"><i class="b1" style="width:'+p[0]+'%"></i><i class="bx" style="width:'+p[1]+'%"></i><i class="b2" style="width:'+p[2]+'%"></i></div><div class="pl"><span>1 · '+Math.round(p[0])+'%</span><span>X · '+Math.round(p[1])+'%</span><span>2 · '+Math.round(p[2])+'%</span></div>';
   if(m.xg)extra+='<div class="xg">Golos esperados: '+m.xg[0].toFixed(1)+' – '+m.xg[1].toFixed(1)+'</div>';
   if(m.tips)extra+='<div class="tps">'+m.tips.map(function(t){return'<div class="tp" style="--p:'+t.p+'%"><b>'+esc(t.k)+'</b><span>'+esc(t.t)+'</span><span class="pc">'+t.p+'%</span></div>'}).join("")+'</div>'}
- return'<div class="m'+(live?" hot":"")+'"><div class="lg">'+esc(m.comp)+'</div><div class="g">'+team(m.home)+mid+team(m.away)+'</div>'+extra+'</div>'}
-function loadM(){fetch("/api/matches").then(function(r){return r.json()}).then(function(M){
- var now=M.filter(function(m){return m.status==="IN_PLAY"||m.status==="PAUSED"});
- $("live").classList.toggle("on",now.length>0);
- var fin=M.filter(function(m){return m.status==="FINISHED"}).sort(function(a,b){return a.utc<b.utc?1:-1});
- var up=M.filter(function(m){return m.status!=="FINISHED"&&m.status!=="IN_PLAY"&&m.status!=="PAUSED"}).sort(function(a,b){return a.utc<b.utc?-1:1});
- $("resL").innerHTML=(now.length?"<h2>Agora</h2>"+now.map(function(m){return card(m,false)}).join(""):"")+(fin.length?group(fin,function(m){return card(m,false)}):'<div class="em">Sem resultados recentes.</div>');
- $("dicL").innerHTML=up.length?group(up,function(m){return card(m,true)}):'<div class="em">Sem jogos por começar.</div>';
+ return'<div class="m'+(live?" hot":"")+'"><div class="lg">'+esc(m.l)+'</div><div class="g">'+team(m.home)+mid+team(m.away)+'</div>'+extra+'</div>'}
+function renderJ(){
+ var base=M.filter(function(m){return m.status==="FINISHED"||isLive(m)});
+ if(fJ!=="all"&&!base.some(function(m){return m.l===fJ}))fJ="all";
+ $("chipsJ").innerHTML=chipsHtml(base,fJ);
+ var l=base.filter(function(m){return fJ==="all"||m.l===fJ});
+ var now=l.filter(isLive),fin=l.filter(function(m){return m.status==="FINISHED"}).sort(function(a,b){return a.utc<b.utc?1:-1});
+ $("resL").innerHTML=(now.length?"<h2>Agora</h2>"+now.map(function(m){return card(m,false)}).join(""):"")+(fin.length?group(fin,function(m){return card(m,false)}):(now.length?"":'<div class="em">Sem resultados recentes.</div>'))}
+function renderD(){
+ var base=M.filter(function(m){return m.status!=="FINISHED"&&!isLive(m)});
+ if(fD!=="all"&&!base.some(function(m){return m.l===fD}))fD="all";
+ $("chipsD").innerHTML=chipsHtml(base,fD);
+ var up=base.filter(function(m){return fD==="all"||m.l===fD}).sort(function(a,b){return a.utc<b.utc?-1:1});
+ $("dicL").innerHTML=up.length?group(up,function(m){return card(m,true)}):'<div class="em">Sem jogos por começar.</div>'}
+$("chipsJ").onclick=function(e){var b=e.target.closest("button");if(b){fJ=b.dataset.k;renderJ()}};
+$("chipsD").onclick=function(e){var b=e.target.closest("button");if(b){fD=b.dataset.k;renderD()}};
+function loadM(){fetch("/api/matches").then(function(r){return r.json()}).then(function(D){
+ M=D.map(function(m){m.l=lname(m.comp);return m});
+ $("live").classList.toggle("on",M.some(isLive));
+ renderJ();renderD();
  $("upd").textContent="atualizado às "+hr(new Date());
 }).catch(function(){$("resL").innerHTML=$("dicL").innerHTML='<div class="em">Não foi possível carregar os jogos.</div>'})}
 loadM();setInterval(loadM,120000);
