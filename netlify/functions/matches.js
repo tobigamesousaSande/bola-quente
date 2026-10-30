@@ -1,7 +1,13 @@
 const C = ["PPL", "PL", "PD", "SA", "BL1", "FL1", "CL"];
 const B = "https://api.football-data.org/v4";
 const H = { "X-Auth-Token": process.env.FOOTBALL_DATA_KEY || "" };
-const j = async (u) => { const r = await fetch(B + u, { headers: H }); if (!r.ok) throw new Error(r.status); return r.json(); };
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const j = async (u, n = 0) => {
+  const r = await fetch(B + u, { headers: H });
+  if (r.status === 429 && n < 2) { await sleep(7000); return j(u, n + 1); }
+  if (!r.ok) throw new Error(r.status);
+  return r.json();
+};
 const day = (o) => new Date(Date.now() + o * 864e5).toISOString().slice(0, 10);
 const FA = [1, 1, 2, 6, 24, 120, 720, 5040, 40320];
 const po = (l, k) => Math.exp(-l) * Math.pow(l, k) / FA[k];
@@ -53,8 +59,8 @@ exports.handler = async () => {
       const md = model(st[x.homeTeam.id], st[x.awayTeam.id], avg[x.competition.code], hn, an) || {};
       return { id: x.id, comp: x.competition.name, utc: x.utcDate, status: x.status, home: hn, away: an, hs: x.score.fullTime.home, as: x.score.fullTime.away, prob: md.prob || null, xg: md.xg || null, tips: md.tips || null };
     });
-    return { statusCode: 200, headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=60, s-maxage=120" }, body: JSON.stringify(out) };
+    return { statusCode: 200, headers: { "Content-Type": "application/json", "Cache-Control": "public, max-age=60, s-maxage=120, stale-while-revalidate=3600" }, body: JSON.stringify(out) };
   } catch (e) {
-    return { statusCode: 502, body: JSON.stringify({ error: String(e) }) };
+    return { statusCode: 502, headers: { "Cache-Control": "no-store" }, body: JSON.stringify({ error: String(e) }) };
   }
 };
